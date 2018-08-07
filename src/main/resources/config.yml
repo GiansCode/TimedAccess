@@ -1,0 +1,29 @@
+# Permissions:
+# /timedaccess : timedaccess.command
+# /timedaccess give : timedaccess.command.give
+# /timedaccess get : timedaccess.command.get
+# Bypass: timedaccess.bypass
+
+# Placeholders:
+# timedaccess_time (player)
+
+kick_commands:
+- "kick {0} &cYou ran out of playtime" # player
+- "broadcast &c{0} ran out of playtime"
+
+messages:
+  no_permission: "&cYou don't have permission"
+  command_usage:
+  - "&aTimedAccess:"
+  - "&e/timedaccess give <player> <time>"
+  - "&e/timedaccess get <player>"
+  command_give_usage: "&cUsage: /timedaccess give <player> <time>"
+  command_get_usage: "&cUsage: /timedaccess get <player>"
+  command_give_success: "&aYou gave {0} {1} of playtime" # player, formatted time
+  command_get_success: "{0} has {1} time remaining" # player, formatted time
+  command_get_received: "&a{0} gave you {1} of time" # player, formatted time
+  player_offline: "&cThat player is not online"
+  invalid_time: "&cThat is not a valid time format"
+  kick_no_time: "&cYou must purchase more playtime to join"
+  unlimited_time_format: "unlimited"
+  no_time_format: "no" # eg: <player> has "no" time remaining"

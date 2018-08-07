@@ -1,0 +1,9 @@
+name: TimedAccess
+version: ${project.version}
+author: Mas281
+
+main: me.itsmas.timedaccess.TimedAccess
+
+commands:
+  timedaccess:
+    aliases: [ta]
