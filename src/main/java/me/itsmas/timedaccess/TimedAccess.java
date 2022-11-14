@@ -6,11 +6,13 @@ import me.itsmas.timedaccess.listener.LoginListener;
 import me.itsmas.timedaccess.placeholder.PlaceholderHook;
 import me.itsmas.timedaccess.task.TimeCheckTask;
 import me.itsmas.timedaccess.util.Message;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TimedAccess extends JavaPlugin
 {
     private DataManager dataManager;
+    private int default_time;
 
     @Override
     public void onEnable()
@@ -18,10 +20,12 @@ public class TimedAccess extends JavaPlugin
         preInit();
 
         dataManager = new DataManager(this);
+        default_time = getConfig().getInt("default_playtime");
 
         new LoginListener(this);
-        new PlaceholderHook(this).hook();
-
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderHook(this).register();
+        }
         new TimeCheckTask(this);
 
         getCommand("timedaccess").setExecutor(new MainCommand(this));
@@ -36,6 +40,10 @@ public class TimedAccess extends JavaPlugin
     public DataManager getDataManager()
     {
         return dataManager;
+    }
+
+    public int getDefaultTime() {
+        return default_time;
     }
 
     private void preInit()

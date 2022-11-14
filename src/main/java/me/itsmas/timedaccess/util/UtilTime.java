@@ -1,7 +1,5 @@
 package me.itsmas.timedaccess.util;
 
-import sh.okx.timeapi.api.TimeAPI;
-
 import java.util.concurrent.TimeUnit;
 
 public final class UtilTime
@@ -12,7 +10,7 @@ public final class UtilTime
     {
         try
         {
-            return (int) new TimeAPI(input).getMilliseconds();
+            return Integer.parseInt(input);
         }
         catch (IllegalArgumentException ex)
         {

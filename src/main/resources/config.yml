@@ -11,6 +11,8 @@ kick_commands:
 - "kick {0} &cYou ran out of playtime" # player
 - "broadcast &c{0} ran out of playtime"
 
+default_playtime: 600000
+
 messages:
   no_permission: "&cYou don't have permission"
   command_usage:
