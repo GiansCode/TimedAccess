@@ -6,7 +6,7 @@
 
     <groupId>me.itsmas</groupId>
     <artifactId>timedaccess</artifactId>
-    <version>1.0-Modified</version>
+    <version>1.0-Modified.v3</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

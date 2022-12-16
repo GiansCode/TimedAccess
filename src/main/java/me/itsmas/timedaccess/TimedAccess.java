@@ -7,7 +7,11 @@ import me.itsmas.timedaccess.placeholder.PlaceholderHook;
 import me.itsmas.timedaccess.task.TimeCheckTask;
 import me.itsmas.timedaccess.util.Message;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TimedAccess extends JavaPlugin
 {
@@ -17,6 +21,7 @@ public class TimedAccess extends JavaPlugin
     @Override
     public void onEnable()
     {
+
         preInit();
 
         dataManager = new DataManager(this);

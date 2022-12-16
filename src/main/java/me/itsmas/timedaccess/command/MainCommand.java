@@ -3,6 +3,7 @@ package me.itsmas.timedaccess.command;
 import me.itsmas.timedaccess.TimedAccess;
 import me.itsmas.timedaccess.util.Message;
 import me.itsmas.timedaccess.util.Permission;
+import me.itsmas.timedaccess.util.UtilReason;
 import me.itsmas.timedaccess.util.UtilTime;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -10,6 +11,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 public class MainCommand implements CommandExecutor
 {
@@ -48,6 +53,14 @@ public class MainCommand implements CommandExecutor
         {
             handleGet(sender, args);
         }
+        else if (args[0].equalsIgnoreCase("remove"))
+        {
+            handleRemove(sender, args);
+        }
+        else if (args[0].equalsIgnoreCase("history"))
+        {
+            handleHistory(sender, args);
+        }
         else
         {
             Message.COMMAND_USAGE.send(sender);
@@ -61,7 +74,7 @@ public class MainCommand implements CommandExecutor
             return;
         }
 
-        if (args.length != 3)
+        if (args.length < 3)
         {
             Message.COMMAND_GIVE_USAGE.send(sender);
             return;
@@ -77,7 +90,21 @@ public class MainCommand implements CommandExecutor
             return;
         }
 
-        plugin.getDataManager().extendTime(player, time);
+        ArrayList<String> reason = new ArrayList<>();
+        reason.addAll(Arrays.asList(args));
+        reason.remove(0);
+        reason.remove(0);
+        reason.remove(0);
+
+        StringBuilder reason_final = new StringBuilder();
+        for (String s : reason) {
+            reason_final.append(s).append(" ");
+        }
+        if (reason.size()==0) {
+            reason_final.append("Unknown Reason.");
+        }
+
+        plugin.getDataManager().extendTime(player, time, reason_final.toString(), sender);
 
         String formatted = UtilTime.toHms(time);
         Message.COMMAND_GIVE_SUCCESS.send(sender, player.getName(), formatted);
@@ -106,6 +133,48 @@ public class MainCommand implements CommandExecutor
 
         String time = UtilTime.toHms(plugin.getDataManager().getTimeRemaining(player));
         Message.COMMAND_GET_SUCCESS.send(sender, player.getName(), time);
+    }
+
+    private void handleRemove(CommandSender sender, String[] args)
+    {
+        if (!Permission.check(sender, "timedaccess.command.remove"))
+        {
+            Message.COMMAND_REMOVE_USAGE.send(sender);
+            return;
+        }
+
+        if (args.length != 2)
+        {
+            Message.COMMAND_REMOVE_USAGE.send(sender);
+            return;
+        }
+
+        OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
+
+        plugin.getDataManager().remove(player);
+        Message.COMMAND_REMOVE_SUCCESS.send(sender, player.getName());
+    }
+
+    private void handleHistory(CommandSender sender, String[] args)
+    {
+        if (!Permission.check(sender, "timedaccess.command.history"))
+        {
+            Message.COMMAND_HISTORY_USAGE.send(sender);
+            return;
+        }
+
+        if (args.length != 2)
+        {
+            Message.COMMAND_HISTORY_USAGE.send(sender);
+            return;
+        }
+
+        OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
+
+        for (String s : plugin.getDataManager().getReasons(player)) {
+            UtilReason reason = UtilReason.parseReason(s);
+            Message.COMMAND_HISTORY_FORMAT.send(sender, new Date((long)reason.getTimestamp()).toString(), reason.getWho(), UtilTime.toHms(reason.getTimeAdded()), reason.getReason());
+        }
     }
 
     private boolean checkPlayer(Player player, CommandSender sender)
